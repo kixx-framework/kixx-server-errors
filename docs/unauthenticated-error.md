@@ -1,43 +1,27 @@
 # UnauthenticatedError
 
-A 401 Unauthorized error class that indicates the request lacks valid authentication credentials. This class is different from UnauthorizedError to differentiate between authentication (AuthN) and authorization (AuthZ) errors.
+HTTP 401. The request did not present valid authentication credentials (no token, expired session, etc). For credentials that were presented but rejected, use [`UnauthorizedError`](./unauthorized-error.md). For authenticated callers lacking permission, use [`ForbiddenError`](./forbidden-error.md).
 
-## Properties
+Extends [`WrappedError`](./wrapped-error.md). See [MDN: 401](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401).
 
-Inherits all properties from `WrappedError` with the following defaults:
+## Defaults
 
-| Property | Value | Description |
-|----------|-------|-------------|
-| `name` | 'UnauthenticatedError' | The name of the error class |
-| `code` | 'UNAUTHENTICATED_ERROR' | The error code |
-| `httpError` | true | Indicates this is an HTTP error |
-| `httpStatusCode` | 401 | The HTTP status code |
-| `expected` | true | Indicates this is an expected error |
+| Property | Value |
+|----------|-------|
+| `name` | `'UnauthenticatedError'` |
+| `code` | `'UNAUTHENTICATED_ERROR'` |
+| `httpStatusCode` | `401` |
+| `httpError` | `true` |
+| `expected` | `true` |
 
-## Constructor Parameters
+## Options
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `message` | string | The error message describing the authentication failure |
-| `options` | object | Optional configuration object |
-| `sourceFunction` | function | Optional function where the error occurred |
+Accepts all [`WrappedError` options](./wrapped-error.md#options). No additional options.
 
-### Options Object
-
-Inherits all options from `WrappedError` with the following defaults:
-
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `expected` | boolean | true | Whether the error was expected |
-| `cause` | Error | null | The underlying error cause. See [MDN Error:cause](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-| `httpError` | boolean | true | Whether this is an HTTP error |
-| `httpStatusCode` | number | 401 | HTTP status code |
-
-## Usage
+## Example
 
 ```javascript
 import { UnauthenticatedError } from 'kixx-server-errors';
 
-// Basic usage
 throw new UnauthenticatedError('Authentication required');
 ```

@@ -1,48 +1,45 @@
 # UnsupportedMediaTypeError
 
-A 415 Unsupported Media Type error class that indicates the server refuses to accept the request because the payload format is in an unsupported format.
+HTTP 415. The request payload's `Content-Type` / `Content-Encoding` / `Content-Language` is not one the server will accept. Carries the supported values so the handler can surface them in the response body.
 
-## Properties
+Extends [`WrappedError`](./wrapped-error.md). See [MDN: 415](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/415).
 
-Inherits all properties from `WrappedError` with the following defaults:
+## Defaults
 
-| Property | Value | Description |
-|----------|-------|-------------|
-| `name` | 'UnsupportedMediaTypeError' | The name of the error class |
-| `code` | 'UNSUPPORTED_MEDIA_TYPE_ERROR' | The error code |
-| `httpError` | true | Indicates this is an HTTP error |
-| `httpStatusCode` | 415 | The HTTP status code |
-| `expected` | true | Indicates this is an expected error |
+| Property | Value |
+|----------|-------|
+| `name` | `'UnsupportedMediaTypeError'` |
+| `code` | `'UNSUPPORTED_MEDIA_TYPE_ERROR'` |
+| `httpStatusCode` | `415` |
+| `httpError` | `true` |
+| `expected` | `true` |
 
-## Constructor Parameters
+## Instance members
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `message` | string | The error message describing the media type issue |
-| `options` | object | Optional configuration object |
-| `sourceFunction` | function | Optional function where the error occurred |
+Each of these is a frozen copy of the corresponding option, or an empty frozen array if not supplied.
 
-### Options Object
+| Member | Type | Description |
+|--------|------|-------------|
+| `accept` | `ReadonlyArray<string>` | Media types the server will accept on request bodies. |
+| `acceptEncoding` | `ReadonlyArray<string>` | Encodings the server will accept on request bodies. |
+| `acceptLanguage` | `ReadonlyArray<string>` | Languages the server will accept on request bodies. |
 
-Inherits all options from `WrappedError` with the following defaults:
+## Options
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `expected` | boolean | true | Whether the error was expected |
-| `cause` | Error | null | The underlying error cause. See [MDN Error:cause](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-| `httpError` | boolean | true | Whether this is an HTTP error |
-| `httpStatusCode` | number | 415 | HTTP status code |
-| `accept` | string[] | [] | List of accepted content types |
-| `acceptEncoding` | string[] | [] | List of accepted encodings |
-| `acceptLanguage` | string[] | [] | List of accepted languages |
+Accepts all [`WrappedError` options](./wrapped-error.md#options) plus:
 
-## Usage
+| Option | Type | Description |
+|--------|------|-------------|
+| `accept` | `string[]` | Acceptable request media types. |
+| `acceptEncoding` | `string[]` | Acceptable request encodings. |
+| `acceptLanguage` | `string[]` | Acceptable request languages. |
+
+## Example
 
 ```javascript
 import { UnsupportedMediaTypeError } from 'kixx-server-errors';
 
-// Basic usage
-throw new UnsupportedMediaTypeError('Unsupported media type', {
-    acceptEncoding: ['gzip']
+throw new UnsupportedMediaTypeError('Request body must be JSON', {
+    accept: [ 'application/json' ],
 });
 ```

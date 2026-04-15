@@ -1,40 +1,27 @@
 # ConflictError
 
-An error class which represents an HTTP 409 Conflict.
+HTTP 409. The request conflicts with the current resource state — duplicate unique key, stale `If-Match`, concurrent-edit collision, etc.
 
-## Properties
+Extends [`WrappedError`](./wrapped-error.md). See [MDN: 409](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/409).
 
-Inherits all properties from `WrappedError` with the following defaults:
+## Defaults
 
-| Property | Value | Description |
-|----------|-------|-------------|
-| `name` | 'ConflictError' | The name of the error class |
-| `code` | 'CONFLICT_ERROR' | The error code |
-| `httpError` | true | Indicates this is an HTTP error |
-| `httpStatusCode` | 409 | The HTTP status code |
-| `expected` | true | Indicates this is an expected error |
+| Property | Value |
+|----------|-------|
+| `name` | `'ConflictError'` |
+| `code` | `'CONFLICT_ERROR'` |
+| `httpStatusCode` | `409` |
+| `httpError` | `true` |
+| `expected` | `true` |
 
-## Constructor Parameters
+## Options
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `message` | string | The error message describing the conflict |
-| `options` | object | Optional configuration object including [cause](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-| `sourceFunction` | function | Optional function where the error occurred |
+Accepts all [`WrappedError` options](./wrapped-error.md#options). No additional options.
 
-### Options Object
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `expected` | boolean | true | Whether the error was expected |
-| `httpError` | boolean | true | Whether this is an HTTP error |
-| `httpStatusCode` | number | 409 | The HTTP status code |
-| `cause` | Error | null | The underlying error cause. See [MDN Error:cause](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-
-## Usage
+## Example
 
 ```javascript
 import { ConflictError } from 'kixx-server-errors';
 
-// Basic usage
-throw new ConflictError('Resource already exists');
+throw new ConflictError(`A user with email "${ email }" already exists`);
 ```

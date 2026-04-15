@@ -1,46 +1,45 @@
 # NotAcceptableError
 
-A 406 Not Acceptable error class that indicates the server cannot produce a response matching the list of acceptable values.
+HTTP 406. No response representation matches the client's `Accept`, `Accept-Encoding`, or `Accept-Language` headers. Carries the server's supported values so the handler can surface them in the response body.
 
-## Properties
+Extends [`WrappedError`](./wrapped-error.md). See [MDN: content negotiation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation).
 
-Inherits all properties from `WrappedError` with the following defaults:
+## Defaults
 
-| Property | Value | Description |
-|----------|-------|-------------|
-| `name` | 'NotAcceptableError' | The name of the error class |
-| `code` | 'NOT_ACCEPTABLE_ERROR' | The error code |
-| `httpError` | true | Indicates this is an HTTP error |
-| `httpStatusCode` | 406 | The HTTP status code |
-| `expected` | true | Indicates this is an expected error |
+| Property | Value |
+|----------|-------|
+| `name` | `'NotAcceptableError'` |
+| `code` | `'NOT_ACCEPTABLE_ERROR'` |
+| `httpStatusCode` | `406` |
+| `httpError` | `true` |
+| `expected` | `true` |
 
-## Constructor Parameters
+## Instance members
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `message` | string | The error message describing why the response is not acceptable |
-| `options` | object | Optional configuration object including [cause](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-| `sourceFunction` | function | Optional function where the error occurred |
+Each of these is a frozen copy of the corresponding option, or an empty frozen array if not supplied.
 
-### Options Object
+| Member | Type | Description |
+|--------|------|-------------|
+| `accept` | `ReadonlyArray<string>` | Media types the server can produce. |
+| `acceptEncoding` | `ReadonlyArray<string>` | Encodings the server can produce. |
+| `acceptLanguage` | `ReadonlyArray<string>` | Languages the server can produce. |
 
-Inherits all options from `WrappedError` with the following defaults:
+## Options
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `expected` | boolean | true | Whether the error was expected |
-| `httpError` | boolean | true | Whether this is an HTTP error |
-| `httpStatusCode` | number | 406 | HTTP status code |
-| `accept` | string[] | [] | List of accepted content types |
-| `acceptEncoding` | string[] | [] | List of accepted encodings |
-| `acceptLanguage` | string[] | [] | List of accepted languages |
+Accepts all [`WrappedError` options](./wrapped-error.md#options) plus:
 
-## Usage
+| Option | Type | Description |
+|--------|------|-------------|
+| `accept` | `string[]` | Producible media types. |
+| `acceptEncoding` | `string[]` | Producible encodings. |
+| `acceptLanguage` | `string[]` | Producible languages. |
+
+## Example
 
 ```javascript
 import { NotAcceptableError } from 'kixx-server-errors';
 
-throw new NotAcceptableError('Content type not supported', {
-    acceptedTypes: ['application/json', 'application/xml']
+throw new NotAcceptableError('Cannot satisfy Accept header', {
+    accept: [ 'application/json', 'application/xml' ],
 });
 ```

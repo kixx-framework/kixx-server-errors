@@ -1,32 +1,48 @@
 # WrappedError
 
-The base class for all error classes in the library. It extends the native `Error` class and provides additional functionality for error handling and debugging.
+Base class for every error in this library. Extends the native `Error` and adds stable, enumerable metadata (`name`, `code`, `expected`, `httpError`, `httpStatusCode`) used by HTTP handlers and serializers.
 
-## Properties
+Throw `WrappedError` directly when wrapping an unexpected failure — the default `expected: false` signals that upstream callers should treat it as a programmer error.
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `name` | string | The name of the error class |
-| `code` | string | A unique error code string |
-| `message` | string | The error message |
-| `expected` | boolean | Indicates if the error was expected (default: true) |
-| `httpError` | boolean | Indicates if this is an HTTP error |
-| `httpStatusCode` | number | The HTTP status code (for HTTP errors) |
+## Defaults
 
-## Constructor Parameters
+| Property | Value |
+|----------|-------|
+| `name` | `'WrappedError'` |
+| `code` | `'WRAPPED_ERROR'` |
+| `expected` | `false` |
+| `httpError` | `false` (no `httpStatusCode` by default) |
+
+## Constructor
+
+```javascript
+new WrappedError(message, options?, sourceFunction?)
+```
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `message` | string | The error message |
-| `options` | object | Optional configuration object including [cause](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-| `sourceFunction` | function | Optional function where the error occurred |
+| `message` | string | Passed to `Error`. |
+| `options` | object | See options below. |
+| `sourceFunction` | function | If provided, stack frames at and above this function are omitted via `Error.captureStackTrace`. |
 
-### Options Object
+## Options
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `name` | string | Class name | Custom error name |
-| `code` | string | Class code | Custom error code |
-| `expected` | boolean | true | Whether the error was expected |
-| `httpError` | boolean | false | Whether this is an HTTP error |
-| `httpStatusCode` | number | undefined | HTTP status code |
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `cause` | Error | — | Standard [`Error: cause`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause). Its `.code` is used as a fallback for `this.code`. |
+| `code` | string | static `CODE` | Overrides the resolved error code. |
+| `name` | string | class name | Overrides the error name. |
+| `expected` | boolean | `false` | Marks this as an operational/expected error. |
+| `httpStatusCode` | number | — | When set, `httpError` becomes `true`. |
+
+## Example
+
+```javascript
+import { WrappedError } from 'kixx-server-errors';
+
+try {
+    await doWork();
+} catch (cause) {
+    throw new WrappedError('doWork failed unexpectedly', { cause });
+}
+```

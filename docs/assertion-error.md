@@ -1,37 +1,23 @@
 # AssertionError
 
-A base error class for assertion failures that occur when a condition is not met.
+Thrown when an internal invariant is violated. Treat this as a programmer error — it means the code reached a state it was written to forbid.
 
-## Properties
+Extends [`WrappedError`](./wrapped-error.md). `expected` defaults to `false`; under a process restarter the recommended response is to crash.
 
-Inherits all properties from `WrappedError` with the following defaults:
+## Defaults
 
-| Property | Value | Description |
-|----------|-------|-------------|
-| `name` | 'AssertionError' | The name of the error class |
-| `code` | 'ASSERTION_ERROR' | The error code |
-| `httpError` | false | Indicates this is not an HTTP error |
-| `expected` | false | Indicates this is an expected error |
+| Property | Value |
+|----------|-------|
+| `name` | `'AssertionError'` |
+| `code` | `'ASSERTION_ERROR'` |
+| `expected` | `false` |
+| `httpError` | `false` |
 
-## Constructor Parameters
+## Options
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `message` | string | The error message describing the assertion failure |
-| `options` | object | Optional configuration object including [cause](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-| `sourceFunction` | function | Optional function where the error occurred |
+Accepts all [`WrappedError` options](./wrapped-error.md#options). No additional options.
 
-### Options Object
-
-Inherits all options from `WrappedError` with the following defaults:
-
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `expected` | boolean | false | Whether the error was expected |
-| `httpError` | boolean | false | Whether this is an HTTP error |
-| `cause` | Error | null | The underlying error cause. See [MDN Error:cause](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-
-## Usage
+## Example
 
 ```javascript
 import { AssertionError } from 'kixx-server-errors';
@@ -40,9 +26,7 @@ async function saveJSONDocument(name, doc) {
     if (!doc?.id) {
         throw new AssertionError('A document must have an "id"');
     }
-
     const filepath = path.join(directory, name);
-    const json = JSON.stringify(doc);
-    await fsp.writeFile(filepath, json, { encoding: 'utf8' });
+    await fsp.writeFile(filepath, JSON.stringify(doc), { encoding: 'utf8' });
 }
 ```

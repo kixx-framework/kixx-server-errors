@@ -1,43 +1,27 @@
 # NotImplementedError
 
-A 501 Not Implemented error class that indicates the requested functionality is not implemented.
+HTTP 501. The server does not support the functionality required to fulfill the request — typically a method the server does not recognize, or a feature flagged as not yet built.
 
-## Properties
+Extends [`WrappedError`](./wrapped-error.md). See [MDN: 501](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/501).
 
-Inherits all properties from `WrappedError` with the following defaults:
+## Defaults
 
-| Property | Value | Description |
-|----------|-------|-------------|
-| `name` | 'NotImplementedError' | The name of the error class |
-| `code` | 'NOT_IMPLEMENTED_ERROR' | The error code |
-| `httpError` | true | Indicates this is an HTTP error |
-| `httpStatusCode` | 501 | The HTTP status code |
-| `expected` | true | Indicates this is an expected error |
+| Property | Value |
+|----------|-------|
+| `name` | `'NotImplementedError'` |
+| `code` | `'NOT_IMPLEMENTED_ERROR'` |
+| `httpStatusCode` | `501` |
+| `httpError` | `true` |
+| `expected` | `true` |
 
-## Constructor Parameters
+## Options
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `message` | string | The error message describing what is not implemented |
-| `options` | object | Optional configuration object including [cause](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-| `sourceFunction` | function | Optional function where the error occurred |
+Accepts all [`WrappedError` options](./wrapped-error.md#options). No additional options.
 
-### Options Object
-
-Inherits all options from `WrappedError` with the following defaults:
-
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `expected` | boolean | true | Whether the error was expected |
-| `cause` | Error | null | The underlying error cause. See [MDN Error:cause](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-| `httpError` | boolean | true | Whether this is an HTTP error |
-| `httpStatusCode` | number | 501 | HTTP status code |
-
-## Usage
+## Example
 
 ```javascript
 import { NotImplementedError } from 'kixx-server-errors';
 
-// Basic usage
-throw new NotImplementedError('Feature not implemented');
+throw new NotImplementedError('PATCH is not implemented for this resource');
 ```

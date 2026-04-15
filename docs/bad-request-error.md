@@ -1,40 +1,27 @@
 # BadRequestError
 
-An error class which represents an HTTP 400 Bad Request.
+HTTP 400. The request is malformed or fails request-shape validation (unparseable body, missing required fields at the envelope level, etc). For per-field validation failures prefer [`ValidationError`](./validation-error.md).
 
-## Properties
+Extends [`WrappedError`](./wrapped-error.md). See [MDN: 400](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400).
 
-Inherits all properties from `WrappedError` with the following defaults:
+## Defaults
 
-| Property | Value | Description |
-|----------|-------|-------------|
-| `name` | 'BadRequestError' | The name of the error class |
-| `code` | 'BAD_REQUEST_ERROR' | The error code |
-| `httpError` | true | Indicates this is an HTTP error |
-| `httpStatusCode` | 400 | The HTTP status code |
-| `expected` | true | Indicates this is an expected error |
+| Property | Value |
+|----------|-------|
+| `name` | `'BadRequestError'` |
+| `code` | `'BAD_REQUEST_ERROR'` |
+| `httpStatusCode` | `400` |
+| `httpError` | `true` |
+| `expected` | `true` |
 
-## Constructor Parameters
+## Options
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `message` | string | The error message describing the bad request |
-| `options` | object | Optional configuration object including [cause](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-| `sourceFunction` | function | Optional function where the error occurred |
+Accepts all [`WrappedError` options](./wrapped-error.md#options). No additional options.
 
-### Options Object
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `expected` | boolean | true | Whether the error was expected |
-| `httpError` | boolean | true | Whether this is an HTTP error |
-| `httpStatusCode` | number | 400 | The HTTP status code |
-| `cause` | Error | null | The underlying error cause. See [MDN Error:cause](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-
-## Usage
+## Example
 
 ```javascript
 import { BadRequestError } from 'kixx-server-errors';
 
-// Basic usage
 throw new BadRequestError('Invalid JSON payload');
 ```

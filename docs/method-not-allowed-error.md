@@ -1,47 +1,39 @@
 # MethodNotAllowedError
 
-A 405 Method Not Allowed error class that indicates the HTTP method is not supported for the requested resource.
+HTTP 405. The resource exists but does not support the request method. Carries `allowedMethods` so the handler can populate the required `Allow` response header.
 
-## Properties
+Extends [`WrappedError`](./wrapped-error.md). See [MDN: 405](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/405).
 
-Inherits all properties from `WrappedError` with the following defaults:
+## Defaults
 
-| Property | Value | Description |
-|----------|-------|-------------|
-| `name` | 'MethodNotAllowedError' | The name of the error class |
-| `code` | 'METHOD_NOT_ALLOWED_ERROR' | The error code |
-| `httpError` | true | Indicates this is an HTTP error |
-| `httpStatusCode` | 405 | The HTTP status code |
-| `expected` | true | Indicates this is an expected error |
+| Property | Value |
+|----------|-------|
+| `name` | `'MethodNotAllowedError'` |
+| `code` | `'METHOD_NOT_ALLOWED_ERROR'` |
+| `httpStatusCode` | `405` |
+| `httpError` | `true` |
+| `expected` | `true` |
 
-## Constructor Parameters
+## Instance members
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `message` | string | The error message describing the method not allowed |
-| `options` | object | Optional configuration object including allowedMethods |
-| `sourceFunction` | function | Optional function where the error occurred |
+| Member | Type | Description |
+|--------|------|-------------|
+| `allowedMethods` | `ReadonlyArray<string>` | Frozen copy of the methods the resource does support. Empty array if none supplied. |
 
-### Options Object
+## Options
 
-Inherits all options from `WrappedError` with the following defaults:
+Accepts all [`WrappedError` options](./wrapped-error.md#options) plus:
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `expected` | boolean | true | Whether the error was expected |
-| `httpError` | boolean | true | Whether this is an HTTP error |
-| `httpStatusCode` | number | 405 | HTTP status code |
-| `allowedMethods` | string[] | [] | List of allowed HTTP methods |
+| Option | Type | Description |
+|--------|------|-------------|
+| `allowedMethods` | `string[]` | Methods to expose via the `allowedMethods` property. Copied and frozen. |
 
-The `allowedMethods` Array will be present on the error instance as `error.allowedMethods`.
-
-## Usage
+## Example
 
 ```javascript
-import { MethodNotAllowedError } from './mod.js';
+import { MethodNotAllowedError } from 'kixx-server-errors';
 
-// Basic usage
-throw new MethodNotAllowedError('Method not allowed', {
-    allowedMethods: ['GET','HEAD']
+throw new MethodNotAllowedError('POST is not supported on this resource', {
+    allowedMethods: [ 'GET', 'HEAD' ],
 });
 ```

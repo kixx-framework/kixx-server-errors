@@ -1,41 +1,32 @@
 # ValidationError
 
-A specialized error class for data validation failures. It extends `WrappedError` and includes additional functionality for handling validation details.
+Aggregates one or more validation failures into a single thrown error. Typical pattern: construct one, push each failure with a message and a source path, then throw if any accumulated.
 
-## Properties
+Extends [`WrappedError`](./wrapped-error.md).
 
-Inherits all properties from `WrappedError` with the following defaults:
+## Defaults
 
-| Property | Value | Description |
-|----------|-------|-------------|
-| `name` | 'ValidationError' | The name of the error class |
-| `code` | 'VALIDATION_ERROR' | The error code |
-| `httpError` | true | Indicates this is an HTTP error |
-| `httpStatusCode` | 422 | The HTTP status code |
-| `expected` | true | Indicates this is an expected error |
-| `length` | 0 | The number of validation objects pushed onto this ValidationError |
-| `errors` | Array | validation objects pushed onto this ValidationError |
+| Property | Value |
+|----------|-------|
+| `name` | `'ValidationError'` |
+| `code` | `'VALIDATION_ERROR'` |
+| `httpStatusCode` | `422` |
+| `httpError` | `true` |
+| `expected` | `true` |
 
-## Constructor Parameters
+## Instance members
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `message` | string | The error message describing the validation failure |
-| `options` | object | Optional configuration object |
-| `sourceFunction` | function | Optional function where the error occurred |
+| Member | Type | Description |
+|--------|------|-------------|
+| `errors` | `Array<{ message: string, source: string }>` | Collected failure entries. |
+| `length` | number | Count of entries in `errors`. |
+| `push(message, source)` | method | Appends `{ message, source }` to `errors`. |
 
-### Options Object
+## Options
 
-Inherits all options from `WrappedError` with the following defaults:
+Accepts all [`WrappedError` options](./wrapped-error.md#options). No additional options.
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `expected` | boolean | true | Whether the error was expected |
-| `cause` | Error | null | The underlying error cause. See [MDN Error:cause](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-| `httpError` | boolean | true | Whether this is an HTTP error |
-| `httpStatusCode` | number | 422 | HTTP status code |
-
-## Usage
+## Example
 
 ```javascript
 import { ValidationError } from 'kixx-server-errors';
@@ -50,11 +41,9 @@ function validateForm(formData) {
         error.push('Invalid name', 'form.name');
     }
 
-    // If we pushed any validation failures, then throw the error.
     if (error.length > 0) {
         throw error;
     }
-
     return formData;
 }
 ```

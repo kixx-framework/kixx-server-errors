@@ -5,6 +5,7 @@
     "exports": "./mod.js",
     "publish": {
         "include": [
+            "docs/",
             "lib/",
             "LICENSE",
             "mod.js",

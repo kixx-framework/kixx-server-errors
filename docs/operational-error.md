@@ -1,41 +1,36 @@
 # OperationalError
 
-A base error class for expectd operational errors that can be handled by the application.
+Base class for expected runtime failures — I/O errors, integration issues, remote service failures — that a correctly-written program should handle rather than crash on.
 
-## Properties
+Extends [`WrappedError`](./wrapped-error.md). Sets `expected: true` by default. Carries no HTTP status; use an HTTP error class for request-handler responses.
 
-Inherits all properties from `WrappedError` with the following defaults:
+## Defaults
 
-| Property | Value | Description |
-|----------|-------|-------------|
-| `name` | 'OperationalError' | The name of the error class |
-| `code` | 'OPERATIONAL_ERROR' | The error code |
-| `httpError` | false | Indicates this is not an HTTP error |
-| `expected` | true | Indicates this is an expected error |
+| Property | Value |
+|----------|-------|
+| `name` | `'OperationalError'` |
+| `code` | `'OPERATIONAL_ERROR'` |
+| `expected` | `true` |
+| `httpError` | `false` |
 
-## Constructor Parameters
+## Options
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `message` | string | The error message describing the operational error |
-| `options` | object | Optional configuration object including [cause](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-| `sourceFunction` | function | Optional function where the error occurred |
+Accepts all [`WrappedError` options](./wrapped-error.md#options). No additional options.
 
-### Options Object
-
-Inherits all options from `WrappedError` with the following defaults:
-
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `expected` | boolean | true | Whether the error was expected |
-| `cause` | Error | null | The underlying error cause. See [MDN Error:cause](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-| `httpError` | boolean | false | Whether this is an HTTP error |
-
-## Usage
+## Example
 
 ```javascript
-import { OperationalError } from './mod.js';
+import { OperationalError } from 'kixx-server-errors';
 
-// Basic usage
-throw new OperationalError('Operation failed');
+try {
+    return await fsp.readFile(filepath, { encoding: 'utf8' });
+} catch (cause) {
+    if (cause.code === 'ENOENT') {
+        throw new OperationalError(
+            `File does not exist at ${ filepath }`,
+            { code: 'FILE_NOT_FOUND', cause }
+        );
+    }
+    throw cause;
+}
 ```
