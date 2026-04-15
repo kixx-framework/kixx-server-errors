@@ -1,6 +1,6 @@
 {
     "name": "kixx-server-errors",
-    "version": "5.0.0",
+    "version": "6.0.0",
     "description": "JavaScript error classes for common use cases in server applicataions",
     "type": "module",
     "exports": "./mod.js",
