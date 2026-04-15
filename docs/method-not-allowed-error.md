@@ -22,7 +22,7 @@ Extends [`WrappedError`](./wrapped-error.md). See [MDN: 405](https://developer.m
 
 ## Options
 
-Accepts all [`WrappedError` options](./wrapped-error.md#options) plus:
+Accepts all [`WrappedError` options](./wrapped-error.md#options) plus the options below. Pass `expected: false` to mark a specific instance as unexpected.
 
 | Option | Type | Description |
 |--------|------|-------------|

@@ -15,7 +15,7 @@ Extends [`WrappedError`](./wrapped-error.md). Sets `expected: true` by default. 
 
 ## Options
 
-Accepts all [`WrappedError` options](./wrapped-error.md#options). No additional options.
+Accepts all [`WrappedError` options](./wrapped-error.md#options). Pass `expected: false` to mark a specific instance as unexpected. No additional options.
 
 ## Example
 

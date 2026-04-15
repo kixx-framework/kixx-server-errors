@@ -62,8 +62,8 @@ describe('OperationalError', ({ it, describe }) => { // eslint-disable-line no-s
         });
 
         it('accepts a custom expected flag', () => {
-            const err = new OperationalError('test message', { expected: true });
-            assertEqual(true, err.expected);
+            const err = new OperationalError('test message', { expected: false });
+            assertEqual(false, err.expected);
         });
 
         it('accepts multiple custom options simultaneously', () => {
@@ -71,12 +71,12 @@ describe('OperationalError', ({ it, describe }) => { // eslint-disable-line no-s
                 name: 'CustomError',
                 code: 'CUSTOM_ERROR_CODE',
                 httpStatusCode: 418,
-                expected: true,
+                expected: false,
             });
             assertEqual('CustomError', err.name);
             assertEqual('CUSTOM_ERROR_CODE', err.code);
             assertEqual(418, err.httpStatusCode);
-            assertEqual(true, err.expected);
+            assertEqual(false, err.expected);
             assertEqual(true, err.httpError);
         });
     });

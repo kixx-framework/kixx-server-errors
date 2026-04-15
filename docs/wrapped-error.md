@@ -32,7 +32,7 @@ new WrappedError(message, options?, sourceFunction?)
 | `cause` | Error | — | Standard [`Error: cause`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause). Its `.code` is used as a fallback for `this.code`. |
 | `code` | string | static `CODE` | Overrides the resolved error code. |
 | `name` | string | class name | Overrides the error name. |
-| `expected` | boolean | `false` | Marks this as an operational/expected error. |
+| `expected` | boolean | class default (`false` for `WrappedError`) | Overrides whether this is an operational/expected error. |
 | `httpStatusCode` | number | — | When set, `httpError` becomes `true`. |
 
 ## Example
