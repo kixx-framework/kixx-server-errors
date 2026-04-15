@@ -1,6 +1,5 @@
-import { describe } from 'kixx-test';
-import { assert, assertEqual } from 'kixx-assert';
-import sinon from 'sinon';
+import { describe, MockTracker } from '../vendor/kixx-test/mod.js';
+import { assert, assertEqual } from '../vendor/kixx-assert/mod.js';
 import { UnauthenticatedError } from '../mod.js';
 
 describe('UnauthenticatedError', ({ it, describe }) => { // eslint-disable-line no-shadow
@@ -88,20 +87,20 @@ describe('UnauthenticatedError', ({ it, describe }) => { // eslint-disable-line 
         let sandbox;
 
         before(() => {
-            sandbox = sinon.createSandbox();
-            sandbox.spy(Error, 'captureStackTrace');
+            sandbox = new MockTracker();
+            sandbox.method(Error, 'captureStackTrace');
         });
 
         after(() => {
-            sandbox.restore();
+            sandbox.restoreAll();
         });
 
         it('captures the stack trace', () => {
             const sourceFunction = () => { };
             const err = new UnauthenticatedError('test message', null, sourceFunction);
-            assertEqual(1, Error.captureStackTrace.callCount);
-            assertEqual(err, Error.captureStackTrace.firstCall.args[0]);
-            assertEqual(sourceFunction, Error.captureStackTrace.firstCall.args[1]);
+            assertEqual(1, Error.captureStackTrace.mock.callCount());
+            assertEqual(err, Error.captureStackTrace.mock.getCall(0).arguments[0]);
+            assertEqual(sourceFunction, Error.captureStackTrace.mock.getCall(0).arguments[1]);
         });
     });
 });
