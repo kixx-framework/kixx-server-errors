@@ -2,7 +2,7 @@ import process from 'node:process';
 import fsp from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { runTests } from 'kixx-test';
+import { runTests } from '../vendor/kixx-test/mod.js';
 
 import { EOL } from 'node:os';
 
