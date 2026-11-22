@@ -1,6 +1,6 @@
 import { describe, MockTracker } from '../vendor/kixx-test/mod.js';
 import { assert, assertEqual } from '../vendor/kixx-assert/mod.js';
-import { WrappedError } from '../mod.js';
+import { OperationalError, WrappedError } from '../mod.js';
 
 describe('WrappedError', ({ it, describe }) => { // eslint-disable-line no-shadow
 
@@ -78,6 +78,45 @@ describe('WrappedError', ({ it, describe }) => { // eslint-disable-line no-shado
             assertEqual(418, err.httpStatusCode);
             assertEqual(true, err.expected);
             assertEqual(true, err.httpError);
+        });
+    });
+
+    // eslint-disable-next-line no-shadow
+    describe('when resolving the .code property', ({ it }) => {
+        it('does not inherit the code of the cause', () => {
+            const cause = new Error('file missing');
+            cause.code = 'ENOENT';
+            const err = new WrappedError('test message', { cause });
+            assertEqual('WRAPPED_ERROR', err.code);
+        });
+
+        it('prefers an explicit code over the code of the cause', () => {
+            const cause = new Error('file missing');
+            cause.code = 'ENOENT';
+            const err = new WrappedError('test message', { cause, code: 'CUSTOM_ERROR_CODE' });
+            assertEqual('CUSTOM_ERROR_CODE', err.code);
+        });
+
+        it('keeps a numeric code', () => {
+            const err = new WrappedError('test message', { code: 42 });
+            assertEqual(42, err.code);
+        });
+
+        it('keeps a numeric code of 0', () => {
+            const err = new WrappedError('test message', { code: 0 });
+            assertEqual(0, err.code);
+        });
+
+        it('falls back to the class code for an empty string', () => {
+            const err = new WrappedError('test message', { code: '' });
+            assertEqual('WRAPPED_ERROR', err.code);
+        });
+
+        it('applies the same rule to subclasses', () => {
+            const cause = new Error('file missing');
+            cause.code = 'ENOENT';
+            const err = new OperationalError('test message', { cause });
+            assertEqual('OPERATIONAL_ERROR', err.code);
         });
     });
 
