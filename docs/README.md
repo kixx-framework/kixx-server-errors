@@ -24,9 +24,12 @@ Error classes that extend the native `Error` with stable metadata for HTTP handl
 | [`MethodNotAllowedError`](./method-not-allowed-error.md) | 405 | HTTP method not supported by the resource. Carries `allowedMethods`. |
 | [`NotAcceptableError`](./not-acceptable-error.md) | 406 | Response cannot match the client's `Accept*` headers. Carries negotiation values. |
 | [`ConflictError`](./conflict-error.md) | 409 | Request conflicts with the current resource state. |
+| [`PreconditionFailedError`](./precondition-failed-error.md) | 412 | A conditional request header evaluated to false. |
+| [`PayloadTooLargeError`](./payload-too-large-error.md) | 413 | Request payload exceeds the size the server accepts. |
 | [`UnsupportedMediaTypeError`](./unsupported-media-type-error.md) | 415 | Request payload is in an unsupported format. Carries negotiation values. |
 | [`ValidationError`](./validation-error.md) | 422 | Aggregates one or more validation failures. |
 | [`NotImplementedError`](./not-implemented-error.md) | 501 | Requested feature or method is not implemented. |
+| [`ServiceUnavailableError`](./service-unavailable-error.md) | 503 | A backing service is temporarily unavailable. Carries `retryAfterSeconds`. |
 
 `UnauthenticatedError` vs `UnauthorizedError`: both are HTTP 401. Use `UnauthenticatedError` when no credentials were presented; use `UnauthorizedError` when credentials were presented but rejected. Use [`ForbiddenError`](./forbidden-error.md) (403) when the caller is authenticated but not permitted.
 
@@ -70,7 +73,7 @@ new SomeError(message, options?, sourceFunction?)
 | Property | Type | Notes |
 |----------|------|-------|
 | `name` | string | Defaults to the class name. Override via `options.name`. |
-| `code` | string | Resolves to `options.code` → `options.cause.code` → the class's static `CODE`. |
+| `code` | string\|number | `options.code` when it is a non-empty string or a number (including `0`); otherwise the class's static `CODE`. Never taken from `options.cause.code`. |
 | `message` | string | Passed to `Error`. |
 | `cause` | Error? | Standard [`Error: cause`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause). |
 | `expected` | boolean | `true` marks an operational/expected error. Default `false` on `WrappedError`; `true` on `OperationalError` and every HTTP error. |
@@ -83,8 +86,8 @@ Name, code, httpStatusCode, expected, and httpError are defined as non-writable,
 
 | Option | Type | Description |
 |--------|------|-------------|
-| `cause` | Error | Underlying cause. Its `.code` is used as a fallback for `this.code`. |
-| `code` | string | Overrides the class's static `CODE`. |
+| `cause` | Error | Underlying cause. |
+| `code` | string\|number | Overrides the class's static `CODE` when it is a non-empty string or a number (including `0`). |
 | `name` | string | Overrides the class name. |
 | `expected` | boolean | Overrides the class's default `expected`. |
 | `httpStatusCode` | number | Overrides the class's static `HTTP_STATUS_CODE`. |
